@@ -30,8 +30,7 @@ Linux:
 CHOOSE STORAGE
 
 #### Antes de gravar, acesse as configurações:
-
- IMAGEM DO RASPBERRY IMAGER
+![raspberry pi imager](raspberry_pi_imager_config.png)
 
 ##### OBS: 
 
@@ -160,18 +159,59 @@ http://hostname.local/
 
 Vá em Machine, crie um arquivo novo e o chame de **printer.cfg**
 
-Acesse o printer.cfg, copie e cole tudo que está no arquivo ............
+Acesse o printer.cfg, copie e cole tudo que está no arquivo [DaVinci_1_0_Pro_printer.cfg](DaVinci_1_0_Pro_printer.cfg)
 
 *Esse arquivo está configurado para impressoras Da Vinci 1.0 Pro*
 
 
 No início do arquivo, altere o valor da serial destacado na imagem abaixo, para o seu ID de serial obtido a cima
-<img width="1153" height="174" alt="image" src="https://github.com/user-attachments/assets/17e95dc3-4cf9-483c-a545-739f98956247" />
+![printer.cfg](printer.cfg.png)
 
+Com isso, já deve ser possível conversar com o MCU.
 
+## 6. Configurar o printer.cfg
+
+Foi necessário mais dois passos para eu realmente conseguir mexer na impressora
+
+#### Primeiro erro:
+![error_heater_bed.png](error_heater_bed.png)
+
+Vá até heater_bed e descomente as linhas necessárias
+
+[heater_bed]
+heater_pin: PD12
+sensor_type: DaVinciBed
+sensor_pin: PA20
+min_temp: -20
+max_temp: 130
+control: pid
+pid_kp: 76.125
+pid_ki: 1.591
+pid_kd: 910.651
+
+#### Segundo erro:
+![error_stepper_z.png](error_stepper_z.png)
+
+Vá até stepper_z e descomente as linhas necessárias
+
+[stepper_z]
+step_pin: PC20
+dir_pin: !PD7
+enable_pin: PD6
+microsteps: 32
+full_steps_per_rotation: 200
+rotation_distance: 1.25
+endstop_pin: ^PD9
+position_endstop: -6.102
+position_min: -6.125
+position_max: 201.25
+homing_speed: 4
+homing_retract_dist: 0
+homing_retract_speed: 3
+second_homing_speed: 2
 
 ## Créditos:
 
-Jo Info Tech: https://www.youtube.com/watch?v=Tgbp7A-5afQ
+Jo Info Tech: [Como Instalar o Firmware Klipper na Impressora](https://www.youtube.com/watch?v=Tgbp7A-5afQ)
 
-DaVinci-10: https://github.com/DaVinci-10/DaVinci1.0_Klipper/
+DaVinci-10: [DaVinci1.0_Klipper](https://github.com/DaVinci-10/DaVinci1.0_Klipper/)
