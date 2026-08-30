@@ -165,6 +165,8 @@ Acesse o printer.cfg, copie e cole tudo que está no arquivo ............
 *Esse arquivo está configurado para impressoras Da Vinci 1.0 Pro*
 
 
+No início do arquivo, altere o valor da serial destacado na imagem abaixo, para o seu ID de serial obtido a cima
+<img width="1153" height="174" alt="image" src="https://github.com/user-attachments/assets/17e95dc3-4cf9-483c-a545-739f98956247" />
 
 
 
