@@ -1,5 +1,7 @@
 # Da Vinci 1.0 Pro + Raspberry Pi + Klipper
 
+English version: [README.en.md](README.en.md)
+
 #### Eu usei:
 - Raspberry PI 3 model B+ 2017 (Pode ser qualquer uma);
 
