@@ -156,13 +156,13 @@ The output should not contain errors.
 #### For this step, connect your printer to your Raspberry Pi
 
 #### Get the MCU ID on the Raspberry Pi
-
+```bash
     ls /dev/serial/by-id/*
-
+```
 #### Access MainsailOS on your PC
-
+```bash
 http://<hostname>.local/
-
+```
 Go to Machine, create a new file, and name it **printer.cfg**
 
 Open printer.cfg, copy and paste everything from [DaVinci_1_0_Pro_printer.cfg](DaVinci_1_0_Pro_printer.cfg)
