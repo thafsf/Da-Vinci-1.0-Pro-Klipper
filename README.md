@@ -1,19 +1,19 @@
 # Da Vinci 1.0 Pro + Raspberry Pi + Klipper
 
-English version: [README.en.md](README.en.md)
+Versão em português: [README.pt.md](README.pt.md)
 
-#### Eu usei:
-- Raspberry PI 3 model B+ 2017 (Pode ser qualquer uma);
+#### I used:
+- Raspberry Pi 3 Model B+ 2017 (any model can work);
 
--  Cartão SD(16GB) para bootar o MainsailOS(Klipper) na Rasp;
+- SD card (16GB) to boot MainsailOS (Klipper) on the Raspberry Pi;
 
--  Notebook(Ubuntu 22.04) para configurar a Rasp (ou pode ser um monitor HDMI);
+- Laptop (Ubuntu 22.04) to configure the Raspberry Pi (or you can use an HDMI monitor);
   
--  Impressora 3D Da Vinci 1.0 Pro (outras versões podem apresentar variações);
+- Da Vinci 1.0 Pro 3D printer (other versions may vary);
   
--  Cabo USB para Arduino.
+- Arduino USB cable.
 
-## 1. Instale o Raspberry Pi Imager e grave o MainsailOS 3.0.0 no seu cartão SD
+## 1. Install Raspberry Pi Imager and flash MainsailOS 3.0.0 to your SD card
 
 Raspberry Pi Imager: https://www.raspberrypi.com/software/
 
@@ -23,75 +23,75 @@ sudo apt update
 sudo apt install rpi-imager
 rpi-imager
 ```
-#### Após a instalação selecione: 
+#### After installation, select: 
 
-  CHOOSE OS --> Other specific-purpose OS --> 3D printing --> MainsailOS 3.0.0 - Raspberry Pi(32-bit)
+  CHOOSE OS --> Other specific-purpose OS --> 3D printing --> MainsailOS 3.0.0 - Raspberry Pi (32-bit)
 
-#### Selecione o seu Cartão SD:
+#### Select your SD card:
 
 CHOOSE STORAGE
 
-#### Antes de gravar, acesse as configurações:
+#### Before flashing, open the settings:
 ![raspberry pi imager](raspberry_pi_imager_config.png)
 
-##### OBS: 
+##### NOTE: 
 
-Algumas Rasp podem não acessar redes 5Ghz, prefira utilizar 2.4Ghz;
+Some Raspberry Pi models may not connect to 5GHz networks; prefer 2.4GHz;
 
-Nas configurações utilizei username e hostname padrão pois não estavam sendo salvos corretamente. (password: raspberry);
+In the settings, I used the default username and hostname because custom values were not being saved correctly. (password: raspberry);
 
-#### Com o seu cartão SD gravado, insira ele na Rasp e a ligue.
+#### With the SD card flashed, insert it into the Raspberry Pi and power it on.
 
-## 2. Configurar a Rasp
+## 2. Configure the Raspberry Pi
 
-Para esse passo, utilizei SSH para acessar a Rasp remotamente, mas você também pode usar um monitor e um teclado.
+For this step, I used SSH to access the Raspberry Pi remotely, but you can also use a monitor and keyboard.
 
-#### Primeiro se conecte na mesma rede que a sua Rasp(Precisa ser uma rede com internet para esse passo)
+#### First connect to the same network as your Raspberry Pi (it must have internet access for this step)
 
-#### Acesse a sua Rasp
+#### Access your Raspberry Pi
 
 Linux/Mac/Windows:
 ```bash
-ssh <usuario>@<hostname>.local
+ssh <username>@<hostname>.local
 ```
-*usuário padrão (usuário: pi  senha: raspberry)*
+*default user (user: pi  password: raspberry)*
 
-ou
+or
 
-Procure o IP da sua Rasp:
+Find your Raspberry Pi IP:
 ```bash
 sudo apt install nmap -y
 nmap -sn 192.168.1.0/24
 ```
-E conecte usando o IP:
+And connect using the IP:
 ```bash
-ssh <usuario>@<IP-DA-RASP>
+ssh <username>@<RASPBERRY-PI-IP>
 ```
 
-#### Atualizar o SO
+#### Update the OS
 
     sudo apt update
     sudo apt upgrade 
     sudo reboot
 
-#### Você também pode acessar
+#### You can also access
 
-Configurações:
+Settings:
 
     sudo raspi-config
 
-Gerenciar conexões Wi-Fi:
+Manage Wi-Fi connections:
 
     sudo nmtui
 
-## 3. Criar o Firmware da placa da impressora(Klipper)
+## 3. Build the printer board firmware (Klipper)
 
-#### Crie o Firmware para a sua impressora
+#### Build firmware for your printer
 ```bash
 cd ~/klipper
 make menuconfig
 ```
-Configure o menu com os seguintes parâmetros para a **Da Vinci 1.0 Pro**:
+Configure the menu with the following parameters for the **Da Vinci 1.0 Pro**:
 
 - **Micro-controller Architecture:** SAM3/SAM4 (Atmel SAM)
 
@@ -99,90 +99,90 @@ Configure o menu com os seguintes parâmetros para a **Da Vinci 1.0 Pro**:
 
 - **Communication interface:** USB
 
-Pressione **Q**, depois **Y** para salvar. E compile o firmware:
+Press **Q**, then **Y** to save. Then compile the firmware:
 
 ```bash
 make
 ```
-*O arquivo gerado ficará salvo em ~/klipper/out/klipper.bin*
+*The generated file will be saved at ~/klipper/out/klipper.bin*
 
-#### Baixe o Firmware para o seu PC
+#### Download the firmware to your PC
 
-Copie para ~/printer_data/config/
+Copy to ~/printer_data/config/
 ```bash
 sudo cp ~/klipper/out/klipper.bin ~/printer_data/config/firmware.bin
 ```
-*Note que o nome do arquivo klipper.bin foi alterado para firmware.bin, que é a forma que a impressora reconhece o arquivo de firmware*
+*Note that the file name klipper.bin was changed to firmware.bin, which is how the printer recognizes the firmware file*
 
-Acesse:
+Access:
 ```bash
 http://<hostname>.local/
 ```
-Vá em Machine e baixe o arquivo firmware.bin para o seu PC
+Go to Machine and download the firmware.bin file to your PC.
 
-## 4. Colocar a Placa-Mãe em Modo Bootloader(ERASE)
+## 4. Put the motherboard in Bootloader Mode (ERASE)
 
-*Faça por sua própria conta e risco*
+*Do this at your own risk*
 
-1. Desligue a impressora e desconecte-a da tomada.
-2. Procure por dois pinos, ou "blocos" de solda, indicados como SW2 (versões antigas: J37 ou JP1/ERASE)
-3. Faça um curto nesses dois pinos utilizando um jumper
-4. Ligue a impressora por 5 segundos e a desligue
-5. Remova o curto entre os dois pinos
-6. Conecte o cabo USB para Arduino na placa e no seu PC e ligue a impressora novamente
+1. Turn off the printer and unplug it.
+2. Look for two pins, or solder pads, marked SW2 (older versions: J37 or JP1/ERASE)
+3. Short these two pins using a jumper
+4. Turn on the printer for 5 seconds, then turn it off
+5. Remove the short from the two pins
+6. Connect the Arduino USB cable to the board and your PC, then turn the printer on again
 
-#### Verifique se funcionou
+#### Check if it worked
 
-Cabo USB está conectado?
+Is the USB cable connected?
 
     ls /dev/ttyACM*
 
-Teste com o *bossac*
+Test with *bossac*
 
     sudo bossac -p /dev/ttyACM0 -i
 
-Deve aparecer informações sobre o MCU da sua placa
+It should show information about your board MCU.
 
-Caso a tela LCD exiba blocos estáticos, provavelmente funcionou também
+If the LCD screen displays static blocks, it probably worked too.
 
-## 5. Gravar o Klipper na placa da impressora
+## 5. Flash Klipper to the printer board
 ```bash
 sudo bossac -p /dev/ttyACM0 -e -w -v -b -R ~/YOUR-PATH-TO/firmware.bin
 ```
-A saída não deve conter erros.
+The output should not contain errors.
 
-## 6. Criar o arquivo de configurações printer.cfg
+## 6. Create the printer.cfg configuration file
 
-#### Para esse passo conecte a sua impressora na sua Rasp
+#### For this step, connect your printer to your Raspberry Pi
 
-#### Obtenha o ID da MCU na Rasp
+#### Get the MCU ID on the Raspberry Pi
 
     ls /dev/serial/by-id/*
 
-#### Acesse o MainsailOS no seu PC
+#### Access MainsailOS on your PC
 
 http://<hostname>.local/
 
-Vá em Machine, crie um arquivo novo e o chame de **printer.cfg**
+Go to Machine, create a new file, and name it **printer.cfg**
 
-Acesse o printer.cfg, copie e cole tudo que está no arquivo [DaVinci_1_0_Pro_printer.cfg](DaVinci_1_0_Pro_printer.cfg)
+Open printer.cfg, copy and paste everything from [DaVinci_1_0_Pro_printer.cfg](DaVinci_1_0_Pro_printer.cfg)
 
-*Esse arquivo está configurado para impressoras Da Vinci 1.0 Pro*
+*This file is configured for Da Vinci 1.0 Pro printers*
 
 
-No início do arquivo, altere o valor da serial destacado na imagem abaixo, para o seu ID de serial obtido a cima
+At the beginning of the file, change the serial value highlighted in the image below to the serial ID obtained above.
 ![printer.cfg](printer.cfg.png)
 
-Com isso, já deve ser possível conversar com o MCU.
+With this, it should already be possible to communicate with the MCU.
 
-## 6. Configurar o printer.cfg
+## 6. Configure printer.cfg
 
-Por fim, foi necessário mais dois passos para realmente conseguir mexer na impressora
+Finally, two more steps were needed to actually get the printer working.
 
-#### Primeiro erro:
+#### First error:
 ![error_heater_bed.png](error_heater_bed.png)
 
-Vá até heater_bed e descomente as linhas abaixo:
+Go to heater_bed and uncomment the lines below:
 
     [heater_bed]
     heater_pin: PD12
@@ -195,10 +195,10 @@ Vá até heater_bed e descomente as linhas abaixo:
     pid_ki: 1.591
     pid_kd: 910.651
 
-#### Segundo erro:
+#### Second error:
 ![error_stepper_z.png](error_stepper_z.png)
 
-Vá até stepper_z e descomente as linhas abaixo:
+Go to stepper_z and uncomment the lines below:
 
     [stepper_z]
     step_pin: PC20
@@ -216,10 +216,10 @@ Vá até stepper_z e descomente as linhas abaixo:
     homing_retract_speed: 3
     second_homing_speed: 2
 
-Com isso, já deve ser possível testar a impressora, controlando temperatura da cama e os motores da extrusora.
+With this, it should be possible to test the printer, controlling bed temperature and extruder motors.
 
-## Créditos:
+## Credits:
 
-Jo Info Tech: [Como Instalar o Firmware Klipper na Impressora](https://www.youtube.com/watch?v=Tgbp7A-5afQ)
+Jo Info Tech: [How to Install Klipper Firmware on the Printer](https://www.youtube.com/watch?v=Tgbp7A-5afQ)
 
 DaVinci-10: [DaVinci1.0_Klipper](https://github.com/DaVinci-10/DaVinci1.0_Klipper/)
