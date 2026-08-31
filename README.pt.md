@@ -160,9 +160,9 @@ A saída não deve conter erros.
     ls /dev/serial/by-id/*
 
 #### Acesse o MainsailOS no seu PC
-
+```bash
 http://<hostname>.local/
-
+```
 Vá em Machine, crie um arquivo novo e o chame de **printer.cfg**
 
 Acesse o printer.cfg, copie e cole tudo que está no arquivo [DaVinci_1_0_Pro_printer.cfg](DaVinci_1_0_Pro_printer.cfg)
