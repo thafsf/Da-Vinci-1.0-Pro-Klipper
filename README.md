@@ -157,7 +157,7 @@ The output should not contain errors.
 
 #### Get the MCU ID on the Raspberry Pi
 ```bash
-    ls /dev/serial/by-id/*
+ls /dev/serial/by-id/*
 ```
 #### Access MainsailOS on your PC
 ```bash
